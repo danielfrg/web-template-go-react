@@ -1,0 +1,37 @@
+{
+    "memo": "9edb969eafee198c160ce78896e6a3e4a4919d9b311ed3a318e111fc0c4200f4",
+    "projects": [
+        {
+            "name": "github.com/codegangsta/inject",
+            "version": "v1.0-rc1",
+            "revision": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/codegangsta/martini",
+            "branch": "master",
+            "revision": "22fa46961aabd2665cf3f1343b146d20028f5071",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/codegangsta/martini-contrib",
+            "branch": "master",
+            "revision": "8ce6181c2609699e4c7cd30994b76a850a9cdadc",
+            "packages": [
+                "render"
+            ]
+        },
+        {
+            "name": "github.com/go-martini/martini",
+            "branch": "master",
+            "revision": "22fa46961aabd2665cf3f1343b146d20028f5071",
+            "packages": [
+                "."
+            ]
+        }
+    ]
+}

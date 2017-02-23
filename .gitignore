@@ -1,0 +1,8 @@
+/.go
+/bin
+/vendor
+/tmp
+
+/public
+npm-debug.log
+/node_modules
