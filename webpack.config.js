@@ -7,6 +7,7 @@ var WebpackShellPlugin = require('webpack-shell-plugin');
 module.exports = {
     entry: [
         './app/index.js',
+        './app/watch.js',
         './app/style/app.sass',
     ],
     output: {
