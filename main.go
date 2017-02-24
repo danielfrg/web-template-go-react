@@ -1,18 +1,3 @@
-// package main
-//
-// import (
-// 	"fmt"
-// 	"github.com/danielfrg/binder/pkg/version"
-// 	"github.com/danielfrg/binder/web"
-// )
-//
-// func main() {
-// 	// hello()
-// 	fmt.Printf(version.VERSION)
-// 	fmt.Printf("\n")
-// 	web.Root()
-// }
-
 package main
 
 import (
