@@ -1,5 +1,5 @@
 {
-    "memo": "9edb969eafee198c160ce78896e6a3e4a4919d9b311ed3a318e111fc0c4200f4",
+    "memo": "8161fc8df2aeea6ccf69b91e44ccd3fc7d21e398781010ced50cd6b818e2b490",
     "projects": [
         {
             "name": "github.com/codegangsta/inject",
@@ -29,6 +29,14 @@
             "name": "github.com/go-martini/martini",
             "branch": "master",
             "revision": "22fa46961aabd2665cf3f1343b146d20028f5071",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/martini-contrib/staticbin",
+            "branch": "master",
+            "revision": "b9631fb8c188bec7aefed202f05fb3b76abadced",
             "packages": [
                 "."
             ]
