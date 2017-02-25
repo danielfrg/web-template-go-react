@@ -1,6 +1,7 @@
 # Go + JS project template
 
 Simple template to use Go as a server and JS for frontend.
+Plus handy tools for development and packaging into a single binary.
 
 ## Uses
 
