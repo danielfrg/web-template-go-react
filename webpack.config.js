@@ -4,12 +4,19 @@ var LiveReloadPlugin = require('webpack-livereload-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var WebpackShellPlugin = require('webpack-shell-plugin');
 
+console.log("NODE_ENV:", process.env.NODE_ENV)
+
+entries = [
+    './app/index.js',
+    './app/style/app.sass'
+]
+
+if (process.env.NODE_ENV == "dev") {
+    entries.push('./app/watch.js');
+}
+
 module.exports = {
-    entry: [
-        './app/index.js',
-        './app/watch.js',
-        './app/style/app.sass',
-    ],
+    entry: entries,
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')

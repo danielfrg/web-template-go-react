@@ -13,8 +13,7 @@ function component () {
   }).then(function(body) {
     var version = document.getElementById("version")
     version.innerText = body
-  })
-
+  });
 
   return element;
 }

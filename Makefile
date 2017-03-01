@@ -19,9 +19,9 @@ build: npm-build
 	go-bindata -pkg pkg -o ./pkg/assets.go ./dist/bundle.js ./dist/bundle.css; \
 	go build -o $(APP) -ldflags="-X main.VERSION=${VERSION}" ${PKG}
 
-# Build 
+# Build
 npm-build:
-	npm run build
+	NODE_ENV=prod npm run build
 
 # Server a built binary
 serve:
@@ -34,7 +34,7 @@ devserve:
 
 # Start the npm build process with auto reload
 npm-devserve:
-	npm run devserve
+	NODE_ENV=dev npm run devserve
 
 # Clean all created directories by the build process
 cleanall:
