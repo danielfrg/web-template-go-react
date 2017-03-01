@@ -3,7 +3,7 @@ BIN := go-template
 # This repo's root import path (under GOPATH).
 PKG := github.com/danielfrg/go-web-template
 
-VERSION := $(shell git describe --always --long)
+VERSION := $(shell git describe --tags --always --long)
 
 ######
 # These variables should not need tweaking.
