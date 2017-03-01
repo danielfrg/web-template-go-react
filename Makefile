@@ -1,9 +1,9 @@
-BIN := binder
+BIN := go-template
 
 # This repo's root import path (under GOPATH).
 PKG := github.com/danielfrg/go-web-template
 
-VERSION := 1.0.0
+VERSION := $(shell git describe --always --long)
 
 ######
 # These variables should not need tweaking.
@@ -15,10 +15,13 @@ APP := ./bin/$(BIN)
 all: build
 
 # Build and package the application into a binary
-build:
-	npm run build; \
+build: npm-build
 	go-bindata -pkg pkg -o ./pkg/assets.go ./dist/bundle.js ./dist/bundle.css; \
-	go build -o ./bin/$(BIN)
+	go build -o $(APP) -ldflags="-X main.VERSION=${VERSION}" ${PKG}
+
+# Build 
+npm-build:
+	npm run build
 
 # Server a built binary
 serve:

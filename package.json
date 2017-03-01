@@ -1,5 +1,5 @@
 {
-  "name": "binder",
+  "name": "go-template",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,8 @@
   "author": "Daniel Rodriguez",
   "license": "Apache 2.0",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
