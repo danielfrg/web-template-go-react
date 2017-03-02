@@ -21,7 +21,18 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+
     module: {
+        loaders: [
+            {
+                test: /.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ],
         rules: [
             {
                 test: [/\.[s]css$/, /\.sass$/],
@@ -29,7 +40,7 @@ module.exports = {
                     use: ['css-loader', 'sass-loader']
                 })
             }
-      ]
+        ]
     },
     watch: false,
     watchOptions: {
