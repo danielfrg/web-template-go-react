@@ -15,7 +15,7 @@ function component () {
     // var version = document.getElementById("version");
     // version.innerText = body;
     var version = $("#version");
-    version.text(body);
+    version.text("ver: " + body);
   });
 
   console.log("Point: ", new Point(1, 23));
