@@ -27,10 +27,6 @@ go-build-dev:
 	go-bindata -pkg pkg -debug -o ./pkg/assets.go ./dist/bundle.js ./dist/bundle.css; \
 	go build -o $(APP) -ldflags="-X ${PKG}/pkg.RepoVersion=${REPO_VERSION}" ${PKG}
 
-# Build JS sources
-npm-build:
-	NODE_ENV=prod npm run build
-
 # Server a built binary
 serve:
 	$(APP)
@@ -38,6 +34,10 @@ serve:
 # Start the Go server with auto reload
 devserve: go-build-dev
 	fresh
+
+# Build JS sources
+npm-build:
+	NODE_ENV=prod npm run build
 
 # Start the npm build process with auto reload
 npm-devserve:
