@@ -4,17 +4,18 @@ import 'whatwg-fetch';
 import Point from './point.js';
 
 function component () {
-  var element = document.createElement('div');
-
-  element.innerHTML = _.join(['Hello', 'world'], ' ') + ': ' + new Point(1, 23);
+  var element = $("#hello")
+  element.text(_.join(['Hello', 'world'], ' ') + ': ' + new Point(1, 25));
 
   fetch('/version')
   .then(function(response) {
     return response.text()
   }).then(function(body) {
     console.log("Version", body);
-    var version = document.getElementById("version");
-    version.innerText = body;
+    // var version = document.getElementById("version");
+    // version.innerText = body;
+    var version = $("#version");
+    version.text(body);
   });
 
   console.log("Point: ", new Point(1, 23));

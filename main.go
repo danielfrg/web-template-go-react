@@ -9,7 +9,6 @@ import (
     "github.com/danielfrg/go-web-template/pkg"
 )
 
-var VERSION string
 
 func main() {
     fmt.Println("Starting server")
@@ -29,7 +28,7 @@ func main() {
     })
 
     m.Get("/version", func() string {
-        return VERSION
+        return pkg.Version()
     })
 
     m.Run()
