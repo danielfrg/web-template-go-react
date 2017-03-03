@@ -1,33 +1,59 @@
 $body-font: 'Open Sans', sans-serif
 
 body
-    background-color: #f3f3f4
     font-family: $body-font
-    color: #4d4d4d
+    font-size: 14px
 
-header
-    background-color: #24292e
-    color: #FFF
+.menu
+    margin-bottom: 15px
+    list-style: none
+    background-color: #fff
+    border: 1px solid #d1d5da
+    border-radius: 3px
 
-a.navbar-brand
-    color: rgba(255, 255, 255, 0.75)
+.menu-heading
+    display: block
+    padding: 8px 10px
+    margin-top: 0
+    margin-bottom: 0
+    font-size: 13px
+    font-weight: 400
+    line-height: 20px
+    color: #586069
+    background-color: #f3f5f8
+    border-bottom: 1px solid #e1e4e8
 
-a.nav-brand:hover
-    color: rgba(255, 255, 255, 0.9)
+.menu-item
+    position: relative
+    display: block
+    padding: 8px 10px
+    border-bottom: 1px solid #e1e4e8
 
-a.nav-link
-    color: rgba(255, 255, 255, 0.75)
+.menu-item:hover
+    text-decoration: none
+    background-color: #f6f8fa
 
-a.nav-link:hover
-    color: rgba(255, 255, 255, 0.9)
+.menu-item:last-child
+    border-bottom: 0
+    border-bottom-right-radius: 2px
+    border-bottom-left-radius: 2px
 
-.content
-    background-color: #FFF
-    padding: 10px 15px 15px 15px
-    margin-top: 15px
+.content-box
+    background-color: #fff
+    padding: 0px 15px 15px 15px
+
+    .mt-3
+        margin-top: 0 !important
+
+.footer
+    position: absolute
+    bottom: 0
+    width: 100%
+
+    .container-fluid
+        padding: 0 10px 5px 10px
 
 .footer-server-ver
-    margin-top: 10px
     display: flex
     flex: 1
     align-items: flex-end
