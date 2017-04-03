@@ -2,14 +2,14 @@ package pkg
 
 import (
 	"fmt"
-	"strings"
 	"os/exec"
+	"strings"
 )
 
-// This might be set at compile time to set the binary version
+// RepoVersion is the string that might be set at compile time to set the binary version
 var RepoVersion string
 
-func git_describe() string {
+func gitDescribe() string {
 	fmt.Println("Executing `git describe` for version in development")
 
 	cmdName := "git"
@@ -17,7 +17,7 @@ func git_describe() string {
 
 	var version string
 	var cmdOut []byte
-	var err    error
+	var err error
 	if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
 		version = "<unkown>"
 	}
@@ -25,9 +25,10 @@ func git_describe() string {
 	return version + "-localdev"
 }
 
+// Version returns the version of the project
 func Version() string {
 	if RepoVersion == "" {
-	    return git_describe()
+		return gitDescribe()
 	}
 	return RepoVersion
 }
