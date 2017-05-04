@@ -41,6 +41,7 @@ serve:
 	$(APP)
 
 # Start the Go server with auto reload
+devserve: bindata_flags = -debug
 devserve: go-bindata
 	fresh
 

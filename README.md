@@ -17,17 +17,18 @@ JS:
 
 ## Dev setup
 
-Requires: 
-    - `make`
-    - `go` (+ [`dep`](https://github.com/golang/dep) for dependencies)
-    - `npm` and `yarn`
+Requires:
+- make`
+- `go` (+ [`dep`](https://github.com/golang/dep) for dependencies)
+- `npm` and `yarn`
 
+Steps:
 1. Clone repo
 2. `make devsetup`
 
 ### How to run for development
 
-1. Terminal 1 for Go server: `make devserve DEBUG=1`
+1. Terminal 1 for Go server: `make devserve`
 2. Terminal 2 for npm build: `make npm-devserve`
 
 Changing Go code will be re-built by `fresh` and changing JS or templates will be re-built by npm/webpack automatically.
