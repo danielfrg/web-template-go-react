@@ -7,18 +7,18 @@ function component () {
   var element = $("#hello")
   element.text(_.join(['Hello', 'world'], ' ') + ': ' + new Point(1, 25));
 
-  fetch('/version')
+  fetch('/api/version')
   .then(function(response) {
     return response.text()
   }).then(function(body) {
-    console.log("Version", body);
+    console.log('Version', body);
     // var version = document.getElementById("version");
     // version.innerText = body;
-    var version = $("#version");
-    version.text("ver: " + body);
+    var version = $('#version');
+    version.text('ver: ' + body);
   });
 
-  console.log("Point: ", new Point(1, 23));
+  console.log('Point: ', new Point(1, 23));
 
   return element;
 }

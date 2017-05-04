@@ -1,42 +1,18 @@
 {
-    "memo": "d5b8643407eccd7a703a5c90fca2b44f5c0ca6cd18856d204808fd4478213361",
+    "memo": "2b2cba33d3131903188dca09bc41b778a5f1e2f1d2d694b57aa0d803dc5cfbab",
     "projects": [
         {
-            "name": "github.com/codegangsta/inject",
-            "version": "v1.0-rc1",
-            "revision": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39",
+            "name": "github.com/elazarl/go-bindata-assetfs",
+            "branch": "master",
+            "revision": "30f82fa23fd844bd5bb1e5f216db87fd77b5eb43",
             "packages": [
                 "."
             ]
         },
         {
-            "name": "github.com/codegangsta/martini",
-            "branch": "master",
-            "revision": "22fa46961aabd2665cf3f1343b146d20028f5071",
-            "packages": [
-                "."
-            ]
-        },
-        {
-            "name": "github.com/codegangsta/martini-contrib",
-            "branch": "master",
-            "revision": "8ce6181c2609699e4c7cd30994b76a850a9cdadc",
-            "packages": [
-                "render"
-            ]
-        },
-        {
-            "name": "github.com/go-martini/martini",
-            "branch": "master",
-            "revision": "22fa46961aabd2665cf3f1343b146d20028f5071",
-            "packages": [
-                "."
-            ]
-        },
-        {
-            "name": "github.com/martini-contrib/staticbin",
-            "branch": "master",
-            "revision": "b9631fb8c188bec7aefed202f05fb3b76abadced",
+            "name": "github.com/julienschmidt/httprouter",
+            "version": "v1.1",
+            "revision": "8c199fb6259ffc1af525cc3ad52ee60ba8359669",
             "packages": [
                 "."
             ]
