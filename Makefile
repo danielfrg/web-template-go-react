@@ -11,17 +11,22 @@ REPO_VERSION := $(shell git describe --tags --always --long)
 
 APP := ./bin/$(BIN)
 
-node_env := prod
+node_env = prod
+
 ifdef DEBUG
 	bindata_flags = -debug
 	node_env = dev
 endif
 
 # Build and package the application into a binary
-all: build
+all: format build
 
 # Build everything and package the application into a binary
 build: npm-build go-build
+
+# Format code
+format:
+	go fmt $(PKG)
 
 # Build go binary data
 go-bindata:
@@ -47,12 +52,16 @@ npm-build:
 npm-devserve:
 	NODE_ENV=dev npm run devserve
 
-# Clean all created directories by the build process
-cleanall:
-	rm -rf bin tmp vendor node_modules npm-debug.log resources/static
-
 # Download the dependencies of the project
-setup:
+devsetup:
 	go get -u github.com/jteeuwen/go-bindata/...; \
 	dep ensure; \
 	yarn install
+
+# Clean all created files by the build process
+clean:
+	rm -rf bin tmp resources/static
+
+# Clean all created files by the build and setup process
+cleanall:
+	rm -rf bin tmp vendor node_modules npm-debug.log resources/static
