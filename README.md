@@ -17,7 +17,10 @@ JS:
 
 ## Dev setup
 
-Requires: `make`, `go` (+ [`dep`](https://github.com/golang/dep) for dependencies), `npm`
+Requires: 
+    - `make`
+    - `go` (+ [`dep`](https://github.com/golang/dep) for dependencies)
+    - `npm` and `yarn`
 
 1. Clone repo
 2. `make devsetup`
