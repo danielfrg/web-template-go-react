@@ -12,7 +12,7 @@ entries = [
 ]
 
 if (process.env.NODE_ENV == "dev") {
-    entries.push('./app/watch.ts');
+    // entries.push('./app/watch.ts');
 }
 
 module.exports = {

@@ -73,5 +73,5 @@ clean:
 cleanall:
 	rm -rf tmp bin vendor node_modules npm-debug.log resources/static
 
-release: go-bindata js-build
-	bash -E ./release/release.sh $(BIN) $(REPO_VERSION)
+release: go-bindata js-build go-build
+	tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./bin/$(BIN)

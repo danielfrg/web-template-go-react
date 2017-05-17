@@ -42,5 +42,5 @@ func main() {
 			&assetfs.AssetFS{Asset: pkg.Asset, AssetDir: pkg.AssetDir, AssetInfo: pkg.AssetInfo},
 		),
 	)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }

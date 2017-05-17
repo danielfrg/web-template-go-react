@@ -7,3 +7,5 @@ pkg/assets.go
 
 npm-debug.log
 /node_modules
+
+release
