@@ -7,6 +7,9 @@ PKG := github.com/danielfrg/go-web-template
 # Variables below should not need tweaking
 ######
 
+GOOS := 
+GOARCH :=
+
 REPO_VERSION := $(shell git describe --tags --always --long)
 
 APP := ./bin/$(BIN)
@@ -18,8 +21,10 @@ ifdef DEBUG
 	node_env = dev
 endif
 
+.PHONY: format build go-bindata go-build serve devserve npm-build npm-devserve devsetup clean cleanall release
+
 # Build and package the application into a binary
-all: format build
+all: build
 
 # Build everything and package the application into a binary
 build: npm-build go-build
@@ -34,7 +39,7 @@ go-bindata:
 
 # Build go sources
 go-build: go-bindata
-	go build -o $(APP) -ldflags="-X ${PKG}/pkg.RepoVersion=${REPO_VERSION}" ${PKG}
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X ${PKG}/pkg.RepoVersion=${REPO_VERSION}" ${PKG}
 
 # Server a built binary
 serve:
@@ -61,8 +66,12 @@ devsetup:
 
 # Clean all created files by the build process
 clean:
-	rm -rf bin tmp resources/static
+	rm -rf tmp bin resources/static;
+	docker rmi -f $(BIN)-release
 
 # Clean all created files by the build and setup process
 cleanall:
-	rm -rf bin tmp vendor node_modules npm-debug.log resources/static
+	rm -rf tmp bin vendor node_modules npm-debug.log resources/static
+
+release: go-bindata npm-build
+	bash -E ./release/release.sh $(BIN) $(REPO_VERSION)
