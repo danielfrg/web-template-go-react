@@ -1,6 +1,6 @@
 # Go + JS project template
 
-Simple template to use Go as a server and JS for frontend.
+Simple template to use Go as a server and Typescript for frontend.
 Plus handy tools for development and packaging into a single binary.
 
 ## Uses
@@ -11,7 +11,7 @@ Go:
 - [go dep](https://github.com/golang/dep) for dependencies
 - [fresh](https://github.com/pilu/fresh/) for recompiling
 
-JS:
+JS (Typescript):
 - [webpack](https://webpack.js.org/) for dependencies and building
 - [livereload](http://livereload.com) for refreshing browser
 

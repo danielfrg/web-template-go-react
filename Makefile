@@ -8,7 +8,7 @@ PKG := github.com/danielfrg/go-web-template
 ######
 
 GOOS := 
-GOARCH :=
+GOARCH := 
 
 REPO_VERSION := $(shell git describe --tags --always --long)
 
@@ -51,12 +51,12 @@ devserve: go-bindata
 	fresh
 
 # Build JS sources
-npm-build:
-	NODE_ENV=$(node_env) npm run build
+js-build:
+	NODE_ENV=$(node_env) yarn run build
 
 # Start the npm build process with auto reload
-npm-devserve:
-	NODE_ENV=dev npm run devserve
+js-devserve:
+	NODE_ENV=dev yarn run devserve
 
 # Download the dependencies of the project
 devsetup:
@@ -73,5 +73,5 @@ clean:
 cleanall:
 	rm -rf tmp bin vendor node_modules npm-debug.log resources/static
 
-release: go-bindata npm-build
+release: go-bindata js-build
 	bash -E ./release/release.sh $(BIN) $(REPO_VERSION)
