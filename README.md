@@ -19,7 +19,7 @@ JS (Typescript):
 ## Dev setup
 
 Requires:
-- make`
+- make
 - `go` (+ [`dep`](https://github.com/golang/dep) for dependencies)
 - `npm` and `yarn`
 
