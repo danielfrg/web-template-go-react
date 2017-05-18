@@ -20,7 +20,7 @@ ifdef DEBUG
 	node_env = dev
 endif
 
-.PHONY: format build proto go-bindata go-build serve devserve npm-build npm-devserve devsetup clean cleanall release
+.PHONY: devsetup format build serve proto go-bindata go-build go-dev js-build js-dev devsetup clean cleanall release
 
 # Build and package the application into a binary
 all: build
@@ -31,19 +31,21 @@ devsetup:
 	go get -u github.com/jteeuwen/go-bindata/...; \
 	go get -u github.com/golang/protobuf/protoc-gen-go; \
 	pushd go; dep ensure; popd; \
-	pushd ts; yarn install; popd
+	pushd ts; yarn install; popd; \
+	conda create -y -p ./python/env python=2.7; \
+	pushd python; ./env/bin/pip install -r requirements.txt; popd;
 
 # Generate protobuf code
 proto:
-	mkdir -p ./go/_proto ./ts/src/_proto; \
-	protoc \
+	mkdir -p ./go/_proto ./ts/src/_proto ./python/_proto; \
+	protoc -I ./protos \
 		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
 		--plugin=protoc-gen-go=${GOBIN}/protoc-gen-go \
-		-I ./proto \
 		--js_out=import_style=commonjs,binary:./ts/src/_proto \
 		--go_out=plugins=grpc:./go/_proto \
 		--ts_out=service=true:./ts/src/_proto \
-		./proto/book_service.proto
+		./protos/book_service.proto; \
+	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/_proto --grpc_python_out=./python/_proto/ ./protos/helloworld.proto
 
 # Build everything and package the application into a binary
 build: js-build go-build

@@ -1,10 +1,1 @@
-/bin
-/go/bin
-/go/vendor
-/go/tmp
-/go/assets.go
-
-/ts/node_modules
-/ts/npm-debug.log
-
 /release
