@@ -91,6 +91,7 @@ py-dev:
 py-proxy:
 	grpcwebproxy --backend_tls=false --backend_tls_noverify --server_tls_cert_file=./misc/localhost.crt --server_tls_key_file=./misc/localhost.key --backend_addr=localhost:9001
 
+# Generate self signed certs
 certs:
 	openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 1024 -keyout misc/localhost.key -out misc/localhost.crt
 
