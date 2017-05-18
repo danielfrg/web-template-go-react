@@ -68,7 +68,7 @@ go-bindata:
 
 # Build go sources
 go-build: go-bindata
-	cd go; GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X ${PKG}/RepoVersion=${REPO_VERSION}" ${PKG}
+	cd go; GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X main.RepoVersion=${REPO_VERSION}" ${PKG}
 
 # Start the Go server with auto reload
 go-dev: bindata_flags = -debug
