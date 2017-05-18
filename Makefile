@@ -45,7 +45,7 @@ proto:
 		--go_out=plugins=grpc:./go/_proto \
 		--ts_out=service=true:./ts/src/_proto \
 		./protos/book_service.proto; \
-	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/_proto --grpc_python_out=./python/_proto/ ./protos/helloworld.proto
+	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/_proto --grpc_python_out=./python/_proto ./protos/helloworld.proto
 
 # Build everything and package the application into a binary
 build: js-build go-build
