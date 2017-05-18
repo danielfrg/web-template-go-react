@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import * as $ from 'jquery';
 import * as rpc from './rpc';
+import * as ext_rpc from './ext_rpc';
 
 // Class example
 class Student {
@@ -44,4 +45,6 @@ window.onload = function() {
 
 // Query WebGRPC
 rpc.getBook();
-rpc.queryBooks();
+// rpc.queryBooks();
+
+ext_rpc.externalGRPC();

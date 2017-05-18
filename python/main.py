@@ -17,8 +17,14 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
 
 def serve():
+    # private_key = open('../misc/localhost.key').read()
+    # certificate_chain = open('../misc/localhost.crt').read()
+    # credentials = grpc.ssl_server_credentials((
+    #         (private_key, certificate_chain),))
+    
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+    # server.add_secure_port('[::]:9001', credentials)
     server.add_insecure_port('[::]:9001')
     server.start()
     try:

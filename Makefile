@@ -20,8 +20,6 @@ ifdef DEBUG
 	node_env = dev
 endif
 
-.PHONY: devsetup format build serve proto go-bindata go-build go-dev js-build js-dev devsetup clean cleanall release
-
 # Build and package the application into a binary
 all: build
 
@@ -45,6 +43,11 @@ proto:
 		--go_out=plugins=grpc:./go/_proto \
 		--ts_out=service=true:./ts/src/_proto \
 		./protos/book_service.proto; \
+    protoc -I ./protos \
+		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
+		--js_out=import_style=commonjs,binary:./ts/src/_proto \
+		--ts_out=service=true:./ts/src/_proto \
+		./protos/helloworld.proto
 	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/_proto --grpc_python_out=./python/_proto ./protos/helloworld.proto
 
 # Build everything and package the application into a binary
@@ -79,6 +82,17 @@ js-build:
 js-dev:
 	cd ts; NODE_ENV=dev yarn run devserve
 
+# Start the python gRPC server
+py-dev:
+	cd python; python main.py
+
+# Start the gRPC web proxy for the python server
+py-proxy:
+	grpcwebproxy --backend_tls=false --backend_tls_noverify --server_tls_cert_file=./misc/localhost.crt --server_tls_key_file=./misc/localhost.key --backend_addr=localhost:9001
+
+certs:
+	openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 1024 -keyout misc/localhost.key -out misc/localhost.crt
+
 # Clean all created files by the build process
 clean:
 	rm -rf go/bin go/tmp ts/resources/static release
@@ -87,5 +101,5 @@ clean:
 cleanall: clean
 	rm -rf go/vendor ts/node_modules ts/npm-debug.log
 
-release: go-bindata js-build go-build
+package: go-bindata js-build go-build
 	mkdir -p release; tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./go/bin/$(BIN)
