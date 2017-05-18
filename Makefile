@@ -1,6 +1,6 @@
-BIN := go-template
+BIN := web-template
 
-PKG := github.com/danielfrg/go-web-template/go
+PKG := github.com/danielfrg/web-template/go
 
 ######
 # Variables below should not need tweaking
@@ -28,6 +28,7 @@ devsetup:
 	go get github.com/pilu/fresh; \
 	go get -u github.com/jteeuwen/go-bindata/...; \
 	go get -u github.com/golang/protobuf/protoc-gen-go; \
+	go get -u github.com/improbable-eng/grpc-web/go/grpcwebproxy; \
 	pushd go; dep ensure; popd; \
 	pushd ts; yarn install; popd; \
 	conda create -y -p ./python/env python=2.7; \
@@ -95,11 +96,11 @@ certs:
 
 # Clean all created files by the build process
 clean:
-	rm -rf go/bin go/tmp ts/resources/static release
+	rm -rf go/bin go/assets.go go/tmp ts/resources/static release
 
 # Clean all created files by the build and setup process
 cleanall: clean
-	rm -rf go/vendor ts/node_modules ts/npm-debug.log
+	rm -rf go/vendor ts/node_modules python/env ts/npm-debug.log
 
 package: go-bindata js-build go-build
 	mkdir -p release; tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./go/bin/$(BIN)
