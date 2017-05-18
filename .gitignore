@@ -1,11 +1,9 @@
-/.go
 /bin
-/vendor
-/tmp
+/go/vendor
+/go/tmp
+/go/assets.go
 
-pkg/assets.go
+/ts/node_modules
+/ts/npm-debug.log
 
-npm-debug.log
-/node_modules
-
-release
+/release

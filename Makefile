@@ -1,7 +1,6 @@
 BIN := go-template
 
-# This repo's root import path (under GOPATH).
-PKG := github.com/danielfrg/go-web-template
+PKG := github.com/danielfrg/go-web-template/go
 
 ######
 # Variables below should not need tweaking
@@ -21,57 +20,70 @@ ifdef DEBUG
 	node_env = dev
 endif
 
-.PHONY: format build go-bindata go-build serve devserve npm-build npm-devserve devsetup clean cleanall release
+.PHONY: format build proto go-bindata go-build serve devserve npm-build npm-devserve devsetup clean cleanall release
 
 # Build and package the application into a binary
 all: build
 
+# Download the dependencies of the project
+devsetup:
+	go get github.com/pilu/fresh; \
+	go get -u github.com/jteeuwen/go-bindata/...; \
+	go get -u github.com/golang/protobuf/protoc-gen-go; \
+	pushd go; dep ensure; popd; \
+	pushd ts; yarn install; popd
+
+# Generate protobuf code
+proto:
+	mkdir -p ./go/_proto ./ts/src/_proto; \
+	protoc \
+		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
+		--plugin=protoc-gen-go=${GOBIN}/protoc-gen-go \
+		-I ./proto \
+		--js_out=import_style=commonjs,binary:./ts/src/_proto \
+		--go_out=plugins=grpc:./go/_proto \
+		--ts_out=service=true:./ts/src/_proto \
+		./proto/book_service.proto
+
 # Build everything and package the application into a binary
-build: npm-build go-build
+build: js-build go-build
+
+# Server a built binary
+serve:
+	go/$(APP)
 
 # Format code
 format:
 	go fmt $(PKG)
-
+	
 # Build go binary data
 go-bindata:
-	go-bindata $(bindata_flags) -pkg pkg -o ./pkg/assets.go -prefix resources -ignore=\\.gitignore ./resources/...
+	go-bindata $(bindata_flags) -pkg main -o ./go/assets.go -prefix ts/resources -ignore=\\.gitignore ./ts/resources/...
 
 # Build go sources
 go-build: go-bindata
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X ${PKG}/pkg.RepoVersion=${REPO_VERSION}" ${PKG}
-
-# Server a built binary
-serve:
-	$(APP)
+	cd go; GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X ${PKG}/RepoVersion=${REPO_VERSION}" ${PKG}
 
 # Start the Go server with auto reload
-devserve: bindata_flags = -debug
-devserve: go-bindata
-	fresh
+go-dev: bindata_flags = -debug
+go-dev: go-bindata
+	cd go; fresh
 
 # Build JS sources
 js-build:
-	NODE_ENV=$(node_env) yarn run build
+	cd ts; NODE_ENV=$(node_env) yarn run build
 
 # Start the npm build process with auto reload
-js-devserve:
-	NODE_ENV=dev yarn run devserve
-
-# Download the dependencies of the project
-devsetup:
-	go get -u github.com/jteeuwen/go-bindata/...; \
-	dep ensure; \
-	yarn install
+js-dev:
+	cd ts; NODE_ENV=dev yarn run devserve
 
 # Clean all created files by the build process
 clean:
-	rm -rf tmp bin resources/static;
-	docker rmi -f $(BIN)-release
+	rm -rf go/bin go/tmp ts/resources/static
 
 # Clean all created files by the build and setup process
-cleanall:
-	rm -rf tmp bin vendor node_modules npm-debug.log resources/static
+cleanall: clean
+	rm -rf go/vendor ts/node_modules ts/npm-debug.log
 
 release: go-bindata js-build go-build
-	tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./bin/$(BIN)
+	mkdir -p release; tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./go/bin/$(BIN)

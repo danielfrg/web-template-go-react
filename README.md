@@ -29,8 +29,8 @@ Steps:
 
 ### How to run for development
 
-1. Terminal 1 for Go server: `make devserve`
-2. Terminal 2 for npm build: `make npm-devserve`
+1. Terminal 1 for npm build: `make npm-devserve`
+1. Terminal 2 for Go server: `make devserve`
 
 Changing Go code will be re-built by `fresh` and changing JS/TS will be re-built by npm/webpack automatically.
 

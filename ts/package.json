@@ -1,0 +1,41 @@
+{
+  "name": "go-template",
+  "version": "1.0.0",
+  "description": "Go template",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "devserve": "./node_modules/.bin/webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Daniel Rodriguez",
+  "license": "Apache License 2.0",
+  "dependencies": {
+    "@types/google-protobuf": "^3.2.5",
+    "@types/jquery": "^2.0.45",
+    "@types/lodash": "^4.14.64",
+    "google-protobuf": "^3.3.0",
+    "grpc-web-client": "^0.2.1",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "whatwg-fetch": "^2.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.2", 
+    "@types/node": "^7.0.18",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "file-loader": "^0.10.0",
+    "node-sass": "^4.5.0",
+    "sass-loader": "^6.0.2",
+    "style-loader": "^0.13.1",
+    "ts-loader": "^2.0.3",
+    "ts-protoc-gen": "^0.3.1",
+    "source-map-loader": "^0.2.1",
+    "webpack": "^2.2.1",
+    "webpack-livereload-plugin": "^0.10.0"
+  }
+}
