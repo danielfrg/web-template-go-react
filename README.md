@@ -9,7 +9,7 @@ Make for basic commands.
 
 Go:
 - [go dep](https://github.com/golang/dep) for dependencies
-- [fresh](https://github.com/pilu/fresh/) for recompiling
+- [fresh](https://github.com/pilu/fresh) for recompiling
 
 JS (Typescript):
 - [yarn](https://github.com/yarnpkg/yarn) for dependencies
@@ -29,8 +29,8 @@ Steps:
 
 ### How to run for development
 
-1. Terminal 1 for npm build: `make npm-devserve`
-1. Terminal 2 for Go server: `make devserve`
+1. Terminal 1 for npm build: `make js-dev`
+1. Terminal 2 for Go server: `make go-dev`
 
 Changing Go code will be re-built by `fresh` and changing JS/TS will be re-built by npm/webpack automatically.
 

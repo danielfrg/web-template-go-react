@@ -79,7 +79,7 @@ js-dev:
 
 # Clean all created files by the build process
 clean:
-	rm -rf go/bin go/tmp ts/resources/static
+	rm -rf go/bin go/tmp ts/resources/static release
 
 # Clean all created files by the build and setup process
 cleanall: clean
