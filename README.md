@@ -1,32 +1,17 @@
-# Project template for Go + TS web server + gRPC
+# Project template for Go + TS + gRPC
 
-Simple template to use Go as a server and Typescript for frontend.
-
-It also has example to have a gRPC based on [gRPC web](https://github.com/improbable-eng/grpc-web) and its proxy.
-
-Includes handy tools for development and packaging into a single binary.
-
-## Uses
-
-Make for basic commands.
-
-Go:
-- [go dep](https://github.com/golang/dep) for dependencies
-- [fresh](https://github.com/pilu/fresh) for recompiling
-
-JS (Typescript):
-- [yarn](https://github.com/yarnpkg/yarn) for dependencies
-- [webpack](https://webpack.js.org/) for compiling TS and bundling
-- [livereload](http://livereload.com) for refreshing browser
-
-Python (external gRPC service)
+Template for:
+- Go as a server and Typescript for frontend
+- Go [gRPC web](https://github.com/improbable-eng/grpc-web) + Typescript as client
+- Python + [gRPC web proxy](https://github.com/improbable-eng/grpc-web) + Typescript as client
+- Package into single binary
 
 ## Dev setup
 
 Requires:
 - make
 - `go` (+ [`dep`](https://github.com/golang/dep))
-- `npm` and `yarn`
+- `npm` (+ `yarn`)
 - `conda` for python
 
 Steps:
@@ -51,12 +36,8 @@ Build a single binary with assets included:
 make
 
 # Build and create tar.gz with binary
-make release
+make package
 
-# Build and release for another platform
-GOOS=linux GOARCH=amd64 make release
+# Build and package for another platform
+GOOS=linux GOARCH=amd64 make package
 ```
-
-## Clean
-
-`make cleanall`
