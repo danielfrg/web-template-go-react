@@ -36,20 +36,20 @@ devsetup:
 
 # Generate protobuf code
 proto:
-	mkdir -p ./go/_proto ./ts/src/_proto ./python/_proto; \
+	mkdir -p ./go/protos ./ts/src/protos ./python/protos; \
 	protoc -I ./protos \
 		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
 		--plugin=protoc-gen-go=${GOBIN}/protoc-gen-go \
-		--js_out=import_style=commonjs,binary:./ts/src/_proto \
-		--go_out=plugins=grpc:./go/_proto \
-		--ts_out=service=true:./ts/src/_proto \
+		--js_out=import_style=commonjs,binary:./ts/src/protos \
+		--go_out=plugins=grpc:./go/protos \
+		--ts_out=service=true:./ts/src/protos \
 		./protos/book_service.proto; \
     protoc -I ./protos \
 		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
-		--js_out=import_style=commonjs,binary:./ts/src/_proto \
-		--ts_out=service=true:./ts/src/_proto \
-		./protos/helloworld.proto
-	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/_proto --grpc_python_out=./python/_proto ./protos/helloworld.proto
+		--js_out=import_style=commonjs,binary:./ts/src/protos \
+		--ts_out=service=true:./ts/src/protos \
+		./protos/helloworld.proto; \
+	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/protos --grpc_python_out=./python/protos ./protos/helloworld.proto
 
 # Build everything and package the application into a binary
 build: js-build go-build

@@ -3,8 +3,8 @@ from concurrent import futures
 
 import grpc
 
-from _proto import helloworld_pb2
-from _proto import helloworld_pb2_grpc
+from protos import helloworld_pb2
+from protos import helloworld_pb2_grpc
 
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24

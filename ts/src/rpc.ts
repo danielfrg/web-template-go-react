@@ -1,6 +1,6 @@
 import {grpc, BrowserHeaders} from "grpc-web-client";
-import {BookService} from "./_proto/book_service_pb_service";
-import {QueryBooksRequest, Book, GetBookRequest} from "./_proto/book_service_pb";
+import {BookService} from "./protos/book_service_pb_service";
+import {QueryBooksRequest, Book, GetBookRequest} from "./protos/book_service_pb";
 
 const host = "http://localhost:9000";
 

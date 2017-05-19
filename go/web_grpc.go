@@ -16,7 +16,7 @@ import (
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
-	library "github.com/danielfrg/web-template/go/_proto"
+	library "github.com/danielfrg/web-template/go/protos"
 )
 
 var books = []*library.Book{

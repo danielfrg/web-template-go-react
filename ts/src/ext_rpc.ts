@@ -1,6 +1,6 @@
 import {grpc, BrowserHeaders} from "grpc-web-client";
-import {Greeter} from "./_proto/helloworld_pb_service";
-import {HelloRequest, HelloReply} from "./_proto/helloworld_pb";
+import {Greeter} from "./protos/helloworld_pb_service";
+import {HelloRequest, HelloReply} from "./protos/helloworld_pb";
 
 // const host = "https://localhost:8443";
 const host = "http://localhost:8080";
