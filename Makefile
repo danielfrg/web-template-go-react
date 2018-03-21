@@ -1,107 +1,105 @@
-BIN := web-template
+GOPATH ?= $(HOME)/go
 
-PKG := github.com/danielfrg/web-template/go
+ENV := development
+GO_ENV := $(ENV)
+NODE_ENV := $(ENV)
 
-######
-# Variables below should not need tweaking
-######
+MKFILE_PATH := $(lastword $(MAKEFILE_LIST))
+CURRENT_DIR := $(patsubst %/,%,$(dir $(realpath $(MKFILE_PATH))))
+BUILDDIR := $(CURRENT_DIR)/build
 
-GOOS := 
-GOARCH := 
+# Project metadata
+PROJECT := $(CURRENT_DIR:$(GOPATH)/src/%=%)
+OWNER := $(notdir $(patsubst %/,%,$(dir $(PROJECT))))
+NAME := $(notdir $(PROJECT))
+BIN := $(BUILDDIR)/$(NAME)
+PKG := $(OWNER)/$(NAME)
+GIT_COMMIT := $(shell git rev-parse --short HEAD)
+GIT_TAG := $(shell git describe --tags --always --long)
+VERSION := $(GIT_TAG)
 
-REPO_VERSION := $(shell git describe --tags --always --long)
+EXTERNAL_TOOLS = \
+	github.com/pilu/fresh
 
-APP := ./bin/$(BIN)
+# Build info
+GOOS ?= $(shell go env GOOS)
+GOARCH ?= $(shell go env GOARCH)
+BUILDTAGS :=
+GOOSARCHES := linux/amd64 windows/amd64 darwin/amd64 linux/arm64 
+CTIMEVAR := -X $(PKG)/version.GIT_TAG=$(GIT_TAG) -X $(PKG)/version.GIT_COMMIT=$(GIT_COMMIT)
+GO_LDFLAGS := -ldflags "-w $(CTIMEVAR)"
+GO_LDFLAGS_STATIC := -ldflags "-w $(CTIMEVAR) -extldflags -static"
 
-node_env = prod
+MD5_CMD ?= md5 -r
+SHA256_CMD ?= shasum -a 256
 
 ifdef DEBUG
-	bindata_flags = -debug
-	node_env = dev
+	GO_ENV := development
+	NODE_ENV := development
 endif
 
-# Build and package the application into a binary
-all: build
+# Build single binary
+all: clean jsbuild gobuild  ## Runs a clean, jsbuild, build
 
-# Download the dependencies of the project
-devsetup:
-	go get github.com/pilu/fresh; \
-	go get -u github.com/jteeuwen/go-bindata/...; \
-	go get -u github.com/golang/protobuf/protoc-gen-go; \
-	go get -u github.com/improbable-eng/grpc-web/go/grpcwebproxy; \
-	pushd go; dep ensure; popd; \
-	pushd ts; yarn install; popd; \
-	conda create -y -p ./python/env python=2.7; \
-	pushd python; ./env/bin/pip install -r requirements.txt; popd;
+gobuild:
+	@packr
+	@go build -tags "$(BUILDTAGS)" $(GO_LDFLAGS) -o $(BIN) .
+	@packr clean
+.PHONY: build
 
-# Generate protobuf code
-proto:
-	mkdir -p ./go/protos ./ts/src/protos ./python/protos; \
-	protoc -I ./protos \
-		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
-		--plugin=protoc-gen-go=${GOBIN}/protoc-gen-go \
-		--js_out=import_style=commonjs,binary:./ts/src/protos \
-		--go_out=plugins=grpc:./go/protos \
-		--ts_out=service=true:./ts/src/protos \
-		./protos/book_service.proto; \
-    protoc -I ./protos \
-		--plugin=protoc-gen-ts=./ts/node_modules/.bin/protoc-gen-ts \
-		--js_out=import_style=commonjs,binary:./ts/src/protos \
-		--ts_out=service=true:./ts/src/protos \
-		./protos/helloworld.proto; \
-	./python/env/bin/python -m grpc_tools.protoc -I ./protos --python_out=./python/protos --grpc_python_out=./python/protos ./protos/helloworld.proto
-
-# Build everything and package the application into a binary
-build: js-build go-build
-
-# Server a built binary
 serve:
-	go/$(APP)
+	@$(BIN)
+.PHONY: serve
 
-# Format code
-format:
-	go fmt $(PKG)
-	
-# Build go binary data
-go-bindata:
-	go-bindata $(bindata_flags) -pkg main -o ./go/assets.go -prefix ts/resources -ignore=\\.gitignore ./ts/resources/...
+jsbuild:
+	@yarn run build
+.PHONY: assets
 
-# Build go sources
-go-build: go-bindata
-	cd go; GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(APP) -ldflags="-X main.RepoVersion=${REPO_VERSION}" ${PKG}
+jsdev:
+	@yarn run watch
+.PHONY: jsdev
 
-# Start the Go server with auto reload
-go-dev: bindata_flags = -debug
-go-dev: go-bindata
-	cd go; fresh
+godev:
+	@fresh
+.PHONY: godev
 
-# Build JS sources
-js-build:
-	cd ts; NODE_ENV=$(node_env) yarn run build
+define buildrelease
+GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 go build \
+	 -o $(BUILDDIR)/$(NAME)-$(1)-$(2) \
+	 -a -tags "$(BUILDTAGS) static_build netgo" \
+	 -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
+$(MD5_CMD) $(BUILDDIR)/$(NAME)-$(1)-$(2) > $(BUILDDIR)/$(NAME)-$(1)-$(2).md5;
+$(SHA256_CMD) $(BUILDDIR)/$(NAME)-$(1)-$(2) > $(BUILDDIR)/$(NAME)-$(1)-$(2).sha256;
+endef
 
-# Start the npm build process with auto reload
-js-dev:
-	cd ts; NODE_ENV=dev yarn run devserve
+release: ## Builds the cross-compiled binaries, naming them in such a way for release (eg. binary-GOOS-GOARCH)
+	@echo "+ $@"
+	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildrelease,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
+.PHONY: release
 
-# Start the python gRPC server
-py-dev:
-	cd python; python main.py
+bootstrap:  ## Installs the necessary go tools for development or build.
+	@echo "==> Bootstrapping ${PROJECT}"
+	@for t in ${EXTERNAL_TOOLS}; do \
+		echo "--> Installing $$t" ; \
+		go get -u "$$t"; \
+	done
+	@yarn install
+.PHONY: bootstrap
 
-# Start the gRPC web proxy for the python server
-py-proxy:
-	grpcwebproxy --backend_tls=false --backend_tls_noverify --server_tls_cert_file=./misc/localhost.crt --server_tls_key_file=./misc/localhost.key --backend_addr=localhost:9001
+deps:  ## Updates all dependencies for this project.
+	@echo "==> Updating deps for ${PROJECT}"
+	@dep ensure -update
+.PHONY: deps
 
-# Generate self signed certs
-certs:
-	openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 1024 -keyout misc/localhost.key -out misc/localhost.crt
+clean: ## Cleanup any build binaries or packages
+	@rm -rf bin build dist release tmp *.log
+	@find . -name '*-packr.go' -delete
+.PHONY: clean
 
-# Clean all created files by the build process
-clean:
-	rm -rf go/bin go/assets.go go/tmp ts/resources/static release
+cleanall: clean  ## Clean + cleanup any build deps
+	@rm -rf vendor node_modules
+.PHONY: cleanall
 
-# Clean all created files by the build and setup process
-cleanall: clean
-	rm -rf go/vendor ts/node_modules python/env ts/npm-debug.log
-
-package: go-bindata js-build go-build
-	mkdir -p release; tar -cvzf "./release/$(BIN).$(REPO_VERSION)_$(GOOS)_$(GOARCH).tar.gz" ./go/bin/$(BIN)
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+.PHONY: help

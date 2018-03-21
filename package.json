@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "mini-css-extract-plugin": "^0.2.0",
+    "node-sass": "^4.7.2",
+    "postcss-loader": "^2.1.2",
+    "sass-loader": "^6.0.7",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.20.3",
+    "ts-loader": "^4.1.0",
+    "typescript": "^2.7.2",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-livereload-plugin": "^2.1.1"
+  },
+  "dependencies": {
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "scripts": {
+    "dev": "./node_modules/.bin/webpack --mode development",
+    "build": "./node_modules/.bin/webpack --mode production",
+    "watch": "./node_modules/.bin/webpack --mode development --watch"
+  }
+}
