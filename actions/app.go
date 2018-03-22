@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -13,7 +14,7 @@ import (
 
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
-var ENV = envy.Get("GO_ENV", "development")
+var ENV = envy.Get("ENV", "development")
 
 func indexHandle(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	box := packr.NewBox("../templates")
@@ -26,7 +27,16 @@ func apiIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprintf(w, version.Version())
+	ver := version.Version()
+
+	data, err := json.Marshal(ver)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(data)
 }
 
 func userHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -37,8 +47,8 @@ func userHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 func WebHandler() http.Handler {
 	router := httprouter.New()
 	router.GET("/", indexHandle)
-	router.GET("/version", versionHandler)
 	router.GET("/api/", apiIndex)
+	router.GET("/api/version", versionHandler)
 	router.GET("/api/v1/u/:name", userHandle)
 
 	staticBox := packr.NewBox("../dist")
