@@ -34,9 +34,13 @@ GO_LDFLAGS_STATIC=-ldflags "-w $(CTIMEVAR) -extldflags -static"
 GOOSARCHES = linux/amd64 windows/amd64 darwin/amd64
 
 # Helpers
-MD5_CMD ?= md5 -r
-SHA256_CMD ?= shasum -a 256
-
+MD5_CMD=md5sum
+SHA256_CMD=sha256sum
+UNAME_S=$(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	MD5_CMD=md5 -r
+	SHA256_CMD=shasum -a 256
+endif
 
 all: clean jsbuild gobuild  ## Runs: clean, jsbuild, build
 
