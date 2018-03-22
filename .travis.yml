@@ -26,16 +26,18 @@ script:
 
 deploy:
   provider: releases
-  file:
-    - cross/web-template-linux-amd64
-    - cross/web-template-linux-amd64.md5
-    - cross/web-template-linux-amd64.sha256
-    - cross/web-template-windows-amd64
-    - cross/web-template-windows-amd64.md5
-    - cross/web-template-windows-amd64.sha256
-    - cross/web-template-darwin-amd64
-    - cross/web-template-darwin-amd64.md5
-    - cross/web-template-darwin-amd64.sha256
+  api_key:
+    secure: $GITHUB_APIKEY
   skip_cleanup: true
   on:
     tags: true
+  file:
+    - build/web-template-linux-amd64
+    - build/web-template-linux-amd64.md5
+    - build/web-template-linux-amd64.sha256
+    - build/web-template-windows-amd64
+    - build/web-template-windows-amd64.md5
+    - build/web-template-windows-amd64.sha256
+    - build/web-template-darwin-amd64
+    - build/web-template-darwin-amd64.md5
+    - build/web-template-darwin-amd64.sha256
