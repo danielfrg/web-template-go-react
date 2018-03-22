@@ -99,7 +99,7 @@ deps:  ## Updates all dependencies for this project.
 .PHONY: tag
 tag: ## Create a new git tag to prepare to build a release
 	git tag -sa $(VERSION) -m "$(VERSION)"
-	@echo "Run git push to push your new tag to GitHub"
+	@echo "Run git push origin $(VERSION) to push your new tag to GitHub"
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages
