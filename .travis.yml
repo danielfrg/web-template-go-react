@@ -14,11 +14,13 @@ matrix:
     - go: tip
   fast_finish: true
 
-install:
-  - apt-get update
-  - apt-get install nodejs
-  - apt-get install npm
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install nodejs
+  - sudo apt-get install npm
   - npm install -g yarn
+
+install:
   - make bootstrap
 
 script:
