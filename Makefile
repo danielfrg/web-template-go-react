@@ -19,7 +19,8 @@ endif
 
 # Bootstrap info
 EXTERNAL_TOOLS = \
-	github.com/pilu/fresh
+	github.com/pilu/fresh \
+	github.com/gobuffalo/packr/...
 
 # Build info
 GOOS ?= $(shell go env GOOS)
