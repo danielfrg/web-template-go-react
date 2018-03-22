@@ -1,7 +1,7 @@
 # Release
 
 1. Bump `VERSION.txt`
-1. Commit bump
+1. Commit bump - TODO: automate this?
 1. `make tag`
     - Creates git tag
 1. `git push`
