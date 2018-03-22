@@ -1,7 +1,9 @@
 # Go + React web template
 
+[![Travis CI](https://travis-ci.org/danielfrg/web-template.svg?branch=master)](https://travis-ci.org/danielfrg/web-template)
+
 Template for:
-- Go as a server
+- Go for webserver
 - Typescript + React for frontend
 - Package into single binary
 
@@ -15,11 +17,8 @@ Requires:
 
 Steps:
 1. Clone/fork repo
-2. 
-```
-make devsetup
-```
 3. Rename (TODO)
+2. `make devsetup`
 
 ### How to run for development
 
