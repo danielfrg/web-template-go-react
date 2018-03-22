@@ -1,0 +1,41 @@
+language: go
+sudo: false
+notifications:
+  email: false
+
+go:
+  - 1.x
+  - tip
+env:
+  global:
+    - GO15VENDOREXPERIMENT=1
+matrix:
+  allow_failures:
+    - go: tip
+  fast_finish: true
+
+install:
+  - apt-get update
+  - apt-get install nodejs
+  - apt-get install npm
+  - npm install -g yarn
+  - make bootstrap
+
+script:
+  - make release
+
+deploy:
+  provider: releases
+  file:
+    - cross/web-template-linux-amd64
+    - cross/web-template-linux-amd64.md5
+    - cross/web-template-linux-amd64.sha256
+    - cross/web-template-windows-amd64
+    - cross/web-template-windows-amd64.md5
+    - cross/web-template-windows-amd64.sha256
+    - cross/web-template-darwin-amd64
+    - cross/web-template-darwin-amd64.md5
+    - cross/web-template-darwin-amd64.sha256
+  skip_cleanup: true
+  on:
+    tags: true
