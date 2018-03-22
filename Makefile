@@ -81,6 +81,11 @@ release: jsbuild ## Builds the cross-compiled binaries, naming them in such a wa
 	@echo "+ $@"
 	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildrelease,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
 
+.PHONY: tag
+tag: ## Create a new git tag to prepare to build a release
+	git tag -sa $(VERSION) -m "$(VERSION)"
+	@echo "Run git push origin $(VERSION) to push your new tag to GitHub"
+
 .PHONY: bootstrap
 bootstrap:  ## Installs the necessary go tools for development or build.
 	@echo "==> Bootstrapping ${PKG}"
@@ -96,10 +101,38 @@ deps:  ## Updates all dependencies for this project.
 	@echo "==> Updating deps for ${PKG}"
 	dep ensure -update
 
-.PHONY: tag
-tag: ## Create a new git tag to prepare to build a release
-	git tag -sa $(VERSION) -m "$(VERSION)"
-	@echo "Run git push origin $(VERSION) to push your new tag to GitHub"
+analyse: fmt lint vet test  ## Run all analyse tools: fmt, lint, vet, test 
+
+.PHONY: fmt
+fmt: ## Verifies all files have men `gofmt`ed
+	@echo "+ $@"
+	@gofmt -s -l . | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
+
+.PHONY: lint
+lint: ## Verifies `golint` passes
+	@echo "+ $@"
+	@golint ./... | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
+
+.PHONY: vet
+vet: ## Verifies `go vet` passes
+	@echo "+ $@"
+	@go vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
+
+.PHONY: test
+test: ## Runs the go tests
+	@echo "+ $@"
+	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
+
+.PHONY: cover
+cover: ## Runs go test with coverage
+	@echo "" > coverage.txt
+	@for d in $(shell go list ./... | grep -v vendor); do \
+		go test -race -coverprofile=profile.out -covermode=atomic "$$d"; \
+		if [ -f profile.out ]; then \
+			cat profile.out >> coverage.txt; \
+			rm profile.out; \
+		fi; \
+	done;
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages

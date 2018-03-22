@@ -24,5 +24,6 @@ yarn-error.log*
 /dist
 /node_modules
 /tmp
+coverage.txt
 
 *-packr.go
