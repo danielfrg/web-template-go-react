@@ -6,28 +6,16 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/packr"
 	"github.com/julienschmidt/httprouter"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/danielfrg/web-template/version"
 )
 
-// ENV is used to help switch settings based on where the
-// application is being run. Default is "development".
-var ENV = envy.Get("ENV", "development")
-
 // App returns the http handler for the server that handles the UI and web API
 func App() http.Handler {
-	if ENV == "production" {
-		logrus.SetFormatter(&logrus.JSONFormatter{})
-	}
-
-	log.WithFields(logrus.Fields{
-		"env": ENV,
-	}).Info("Environment")
-
+	log.WithFields(log.Fields{}).Debug("Building routes")
 	router := httprouter.New()
 	router.GET("/", indexHandler)
 	router.GET("/api/", apiIndex)
@@ -41,8 +29,6 @@ func App() http.Handler {
 
 	return router
 }
-
-var log = logrus.New()
 
 func indexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	box := packr.NewBox("../assets/html")
@@ -79,6 +65,8 @@ func addHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		fmt.Fprintf(w, "Cannot convert `%s` to number", queryValues.Get("b"))
 		return
 	}
+
+	log.WithFields(log.Fields{"a": a, "b": b}).Debug("Adding two numbers")
 	sum := a + b
 	fmt.Fprintf(w, "%d", sum)
 }
