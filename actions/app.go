@@ -21,7 +21,7 @@ var ENV = envy.Get("ENV", "development")
 // Create a new instance of the logger. You can have any number of instances.
 var Log = logrus.New()
 
-func indexHandle(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func indexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	box := packr.NewBox("../assets/html")
 	html := box.String("index.html")
 	fmt.Fprint(w, html)
@@ -44,28 +44,28 @@ func apiIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome to the API!\n")
 }
 
-func addHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func addHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	queryValues := r.URL.Query()
 	a, err := strconv.Atoi(queryValues.Get("a"))
 	if err != nil {
-		fmt.Printf("Cannot convert `%s` to number", queryValues.Get("a"))
+		fmt.Fprintf(w, "Cannot convert `%s` to number", queryValues.Get("a"))
 		return
 	}
 	b, err := strconv.Atoi(queryValues.Get("b"))
 	if err != nil {
-		fmt.Printf("Cannot convert `%s` to number", queryValues.Get("b"))
+		fmt.Fprintf(w, "Cannot convert `%s` to number", queryValues.Get("b"))
 		return
 	}
 	sum := a + b
 	fmt.Fprintf(w, "%d", sum)
 }
 
-func userHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func userHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
 }
 
-// WebHandler returns the http handler for the server that handles the UI and web API
-func WebHandler() http.Handler {
+// App returns the http handler for the server that handles the UI and web API
+func App() http.Handler {
 	// TODO
 	// if Environment == "production" {
 	// 	logrus.SetFormatter(&logrus.JSONFormatter{})
@@ -77,11 +77,11 @@ func WebHandler() http.Handler {
 	}).Info("A group of walrus emerges from the ocean")
 
 	router := httprouter.New()
-	router.GET("/", indexHandle)
+	router.GET("/", indexHandler)
 	router.GET("/api/", apiIndex)
 	router.GET("/api/version", versionHandler)
-	router.GET("/api/v1/add", addHandle)
-	router.GET("/api/v1/user/:name", userHandle)
+	router.GET("/api/v1/add", addHandler)
+	router.GET("/api/v1/user/:name", userHandler)
 
 	staticBox := packr.NewBox("../dist")
 	fileServer := http.FileServer(staticBox)
