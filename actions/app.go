@@ -18,8 +18,31 @@ import (
 // application is being run. Default is "development".
 var ENV = envy.Get("ENV", "development")
 
-// Create a new instance of the logger. You can have any number of instances.
-var Log = logrus.New()
+// App returns the http handler for the server that handles the UI and web API
+func App() http.Handler {
+	if ENV == "production" {
+		logrus.SetFormatter(&logrus.JSONFormatter{})
+	}
+
+	log.WithFields(logrus.Fields{
+		"env": ENV,
+	}).Info("Environment")
+
+	router := httprouter.New()
+	router.GET("/", indexHandler)
+	router.GET("/api/", apiIndex)
+	router.GET("/api/version", versionHandler)
+	router.GET("/api/v1/add", addHandler)
+	router.GET("/api/v1/user/:name", userHandler)
+
+	staticBox := packr.NewBox("../dist")
+	fileServer := http.FileServer(staticBox)
+	router.Handler("GET", "/static/*filepath", http.StripPrefix("/static/", fileServer))
+
+	return router
+}
+
+var log = logrus.New()
 
 func indexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	box := packr.NewBox("../assets/html")
@@ -62,30 +85,4 @@ func addHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func userHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
-}
-
-// App returns the http handler for the server that handles the UI and web API
-func App() http.Handler {
-	// TODO
-	// if Environment == "production" {
-	// 	logrus.SetFormatter(&logrus.JSONFormatter{})
-	// }
-
-	Log.WithFields(logrus.Fields{
-		"animal": "walrus",
-		"size":   10,
-	}).Info("A group of walrus emerges from the ocean")
-
-	router := httprouter.New()
-	router.GET("/", indexHandler)
-	router.GET("/api/", apiIndex)
-	router.GET("/api/version", versionHandler)
-	router.GET("/api/v1/add", addHandler)
-	router.GET("/api/v1/user/:name", userHandler)
-
-	staticBox := packr.NewBox("../dist")
-	fileServer := http.FileServer(staticBox)
-	router.Handler("GET", "/static/*filepath", http.StripPrefix("/static/", fileServer))
-
-	return router
 }
