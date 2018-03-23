@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/packr"
@@ -17,13 +18,9 @@ import (
 var ENV = envy.Get("ENV", "development")
 
 func indexHandle(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	box := packr.NewBox("../templates")
+	box := packr.NewBox("../assets/html")
 	html := box.String("index.html")
 	fmt.Fprint(w, html)
-}
-
-func apiIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Welcome to the API!\n")
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -39,6 +36,26 @@ func versionHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	w.Write(data)
 }
 
+func apiIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprint(w, "Welcome to the API!\n")
+}
+
+func addHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	queryValues := r.URL.Query()
+	a, err := strconv.Atoi(queryValues.Get("a"))
+	if err != nil {
+		fmt.Printf("Cannot convert `%s` to number", queryValues.Get("a"))
+		return
+	}
+	b, err := strconv.Atoi(queryValues.Get("b"))
+	if err != nil {
+		fmt.Printf("Cannot convert `%s` to number", queryValues.Get("b"))
+		return
+	}
+	sum := a + b
+	fmt.Fprintf(w, "%d", sum)
+}
+
 func userHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
 }
@@ -49,7 +66,8 @@ func WebHandler() http.Handler {
 	router.GET("/", indexHandle)
 	router.GET("/api/", apiIndex)
 	router.GET("/api/version", versionHandler)
-	router.GET("/api/v1/u/:name", userHandle)
+	router.GET("/api/v1/add", addHandle)
+	router.GET("/api/v1/user/:name", userHandle)
 
 	staticBox := packr.NewBox("../dist")
 	fileServer := http.FileServer(staticBox)
