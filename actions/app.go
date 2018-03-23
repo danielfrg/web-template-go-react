@@ -9,6 +9,7 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/packr"
 	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 
 	"github.com/danielfrg/web-template/version"
 )
@@ -16,6 +17,9 @@ import (
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
 var ENV = envy.Get("ENV", "development")
+
+// Create a new instance of the logger. You can have any number of instances.
+var Log = logrus.New()
 
 func indexHandle(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	box := packr.NewBox("../assets/html")
@@ -62,6 +66,16 @@ func userHandle(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 // WebHandler returns the http handler for the server that handles the UI and web API
 func WebHandler() http.Handler {
+	// TODO
+	// if Environment == "production" {
+	// 	logrus.SetFormatter(&logrus.JSONFormatter{})
+	// }
+
+	Log.WithFields(logrus.Fields{
+		"animal": "walrus",
+		"size":   10,
+	}).Info("A group of walrus emerges from the ocean")
+
 	router := httprouter.New()
 	router.GET("/", indexHandle)
 	router.GET("/api/", apiIndex)
